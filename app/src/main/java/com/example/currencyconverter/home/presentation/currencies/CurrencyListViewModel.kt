@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyconverter.common.utils.UiState
 import com.example.currencyconverter.common.utils.toUiState
-import com.example.currencyconverter.home.domain.CurrencyRepository
 import com.example.currencyconverter.home.domain.models.CurrencyItem
+import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
+import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
+import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,7 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyListViewModel @Inject constructor(
-    private val repository: CurrencyRepository
+    private val loadRates: LoadRatesUseCase,
+    private val getCurrencyName: GetCurrencyNameUseCase,
+    private val getFlagResId: GetFlagResIdUseCase
 ) : ViewModel() {
 
     var state by mutableStateOf(CurrencyListState())
@@ -32,16 +36,16 @@ class CurrencyListViewModel @Inject constructor(
     fun onAction(action: CurrencyListAction) {
         when (action) {
             is CurrencyListAction.SelectCurrency -> {
-                state.copy(baseCurrency = action.code)
+                state = state.copy(baseCurrency = action.code)
                 startUpdates()
             }
             is CurrencyListAction.ChangeAmount -> {
-                state.copy(amountInput = action.value)
+                state = state.copy(amountInput = action.value)
                 startUpdates()
             }
-            CurrencyListAction.StartEdit -> state.copy(isEditing = true)
+            CurrencyListAction.StartEdit -> state = state.copy(isEditing = true)
             CurrencyListAction.ClearAmount -> {
-                state.copy(amountInput = "1", isEditing = false)
+                state = state.copy(amountInput = "1", isEditing = false)
                 startUpdates()
             }
         }
@@ -50,19 +54,20 @@ class CurrencyListViewModel @Inject constructor(
     private fun startUpdates() {
         updateJob?.cancel()
         updateJob = viewModelScope.launch {
+            if (state.items !is UiState.Success) {
+                state = state.copy(items = UiState.Loading)
+            }
             while (isActive) {
                 val base = state.baseCurrency
                 val amount = state.amountInput.toDoubleOrNull() ?: 1.0
 
-                state.copy(items = UiState.Loading)
-
-                val response = repository.loadRates(base, amount).toUiState()
+                val response = loadRates(base, amount).toUiState()
 
                 when (response) {
                     is UiState.Success -> {
                         val items = response.data.map { rate ->
-                            val name = repository.getCurrencyName(rate.currency)
-                            val flag = repository.getFlagResId(rate.currency)
+                            val name = getCurrencyName(rate.currency)
+                            val flag = getFlagResId(rate.currency)
                             CurrencyItem(
                                 code = rate.currency,
                                 name = name,
@@ -70,7 +75,7 @@ class CurrencyListViewModel @Inject constructor(
                                 rate = rate.value,
                             )
                         }
-                        state.copy(items = UiState.Success(items))
+                        state = state.copy(items = UiState.Success(items))
                     }
                     is UiState.Error -> state = state.copy(items = response)
                     else -> {}

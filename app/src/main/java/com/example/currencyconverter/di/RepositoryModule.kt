@@ -1,11 +1,10 @@
 package com.example.currencyconverter.di
 
 import android.content.Context
-import com.example.currencyconverter.common.currency.data.dataSource.room.ConverterDatabase
 import com.example.currencyconverter.home.data.data_source.remote.CurrencyRepositoryImpl
 import com.example.currencyconverter.home.data.data_source.remote.RatesService
 import com.example.currencyconverter.home.data.data_source.remote.RemoteRatesServiceImpl
-import com.example.currencyconverter.home.domain.CurrencyRepository
+import com.example.currencyconverter.home.domain.data_source.remote.CurrencyRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

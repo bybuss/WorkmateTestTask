@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.currencyconverter.common.design_system.CustomSnackbarHost
 import com.example.currencyconverter.common.design_system.theme.CustomTheme
 import com.example.currencyconverter.home.presentation.currencies.CurrencyListScreenRoot
+import com.example.currencyconverter.home.presentation.exchange.ExchangeScreenRoot
 
 @Composable
 fun AppNavHost() {
@@ -34,7 +35,9 @@ fun AppNavHost() {
                     snackBarHostState = snackbarHostState,
                 )
             }
-            animatedTransition<Screens.Exchange> { }
+            animatedTransition<Screens.Exchange> {
+                ExchangeScreenRoot()
+            }
             animatedTransition<Screens.TransactionHistory> { }
             animatedTransition<Screens.Profile> { }
         }

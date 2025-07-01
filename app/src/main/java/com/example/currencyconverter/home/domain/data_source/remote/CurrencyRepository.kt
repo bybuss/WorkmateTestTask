@@ -1,4 +1,4 @@
-package com.example.currencyconverter.home.domain
+package com.example.currencyconverter.home.domain.data_source.remote
 
 import com.example.currencyconverter.common.utils.Result
 import com.example.currencyconverter.home.domain.models.Rate

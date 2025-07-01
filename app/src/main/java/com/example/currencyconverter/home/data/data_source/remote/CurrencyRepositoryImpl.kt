@@ -6,7 +6,7 @@ import com.example.currencyconverter.common.utils.Result
 import com.example.currencyconverter.common.utils.safeApiCall
 import com.example.currencyconverter.home.data.data_source.remote.dto.RateDto
 import com.example.currencyconverter.home.data.mapper.toDomain
-import com.example.currencyconverter.home.domain.CurrencyRepository
+import com.example.currencyconverter.home.domain.data_source.remote.CurrencyRepository
 import com.example.currencyconverter.home.domain.models.Rate
 import javax.inject.Inject
 

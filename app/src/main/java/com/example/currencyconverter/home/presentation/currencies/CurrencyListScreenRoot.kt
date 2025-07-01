@@ -13,10 +13,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +26,7 @@ import androidx.navigation.NavHostController
 import com.example.currencyconverter.common.design_system.LoadingIndicator
 import com.example.currencyconverter.common.design_system.theme.CustomTheme
 import com.example.currencyconverter.common.utils.UiState
+import com.example.currencyconverter.navigation.Screens
 
 @Composable
 fun CurrencyListScreenRoot(
@@ -52,6 +55,8 @@ fun CurrencyListScreenRoot(
             state = viewModel.state,
             onAction = { action ->
                 when (action) {
+                    is CurrencyListAction.NavigateToExchange
+                        -> navController.navigate(Screens.Exchange(action.codeTo))
                     else -> Unit
                 }
                 viewModel.onAction(action)
@@ -76,7 +81,14 @@ fun CurrencyList(
                     .background(
                         if (isBase) CustomTheme.colors.selectedCard else CustomTheme.colors.cardBackground
                     )
-                    .clickable { onAction(CurrencyListAction.SelectCurrency(item.code)) }
+                    .clickable {
+                        if (state.isEditing && item.code != state.baseCurrency) {
+                            onAction(CurrencyListAction.NavigateToExchange(item.code))
+                        } else {
+                            onAction(CurrencyListAction.SelectCurrency(item.code))
+                            onAction(CurrencyListAction.StartEdit)
+                        }
+                    }
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -94,7 +106,20 @@ fun CurrencyList(
                     TextField(
                         value = state.amountInput,
                         onValueChange = { onAction(CurrencyListAction.ChangeAmount(it)) },
-                        modifier = Modifier.width(100.dp)
+                        modifier = Modifier.width(100.dp),
+                        singleLine = true,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = CustomTheme.colors.cardBackground,
+                            unfocusedContainerColor = CustomTheme.colors.cardBackground,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        textStyle = CustomTheme.typography.h3.copy(color = CustomTheme.colors.primaryText),
+                        trailingIcon = {
+                            IconButton(onClick = { onAction(CurrencyListAction.ClearAmount) }) {
+                                Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                            }
+                        }
                     )
                     IconButton(onClick = { onAction(CurrencyListAction.ClearAmount) }) {
                         Icon(imageVector = Icons.Default.Close, contentDescription = null)
