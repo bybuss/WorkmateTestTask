@@ -1,10 +1,10 @@
-package com.example.currencyconverter.data.dataSource.room.account.dao
+package com.example.currencyconverter.profile.data.data_source.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.currencyconverter.data.dataSource.room.account.dbo.AccountDbo
+import com.example.currencyconverter.profile.data.data_source.room.dbo.AccountDbo
 import kotlinx.coroutines.flow.Flow
 
 @Dao

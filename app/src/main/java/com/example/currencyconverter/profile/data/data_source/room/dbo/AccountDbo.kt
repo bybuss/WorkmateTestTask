@@ -1,4 +1,4 @@
-package com.example.currencyconverter.data.dataSource.room.account.dbo
+package com.example.currencyconverter.profile.data.data_source.room.dbo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,9 +1,9 @@
-package com.example.currencyconverter.data.dataSource.room.transaction.dao
+package com.example.currencyconverter.transaction.data.data_source.room.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.currencyconverter.data.dataSource.room.transaction.dbo.TransactionDbo
+import com.example.currencyconverter.transaction.data.data_source.room.dbo.TransactionDbo
 
 @Dao
 interface TransactionDao {

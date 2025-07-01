@@ -1,4 +1,4 @@
-package com.example.currencyconverter.data.dataSource.room.converter
+package com.example.currencyconverter.common.currency.data.dataSource.room.converter
 
 import androidx.room.TypeConverter
 import java.time.Instant

@@ -1,6 +1,6 @@
-package com.example.currencyconverter.data.dataSource.remote
+package com.example.currencyconverter.home.data.data_source.remote
 
-import com.example.currencyconverter.data.dataSource.remote.dto.RateDto
+import com.example.currencyconverter.home.data.data_source.remote.dto.RateDto
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 

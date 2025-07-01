@@ -1,11 +1,10 @@
-package com.example.currencyconverter.data.dataSource.room.transaction.dbo
+package com.example.currencyconverter.transaction.data.data_source.room.dbo
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.example.currencyconverter.data.dataSource.room.converter.Converters
-import java.math.BigDecimal
+import com.example.currencyconverter.common.currency.data.dataSource.room.converter.Converters
 import java.time.LocalDateTime
 
 @Entity(tableName = "transactions")
