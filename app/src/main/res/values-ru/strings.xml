@@ -33,4 +33,8 @@
     <string name="currency_try">Турецкая Лира</string>
     <string name="currency_usd">Американский Доллар</string>
     <string name="currency_zar">Южноафриканский Ранд</string>
+
+    <string name="nav_currencies">Валюты</string>
+    <string name="nav_transactions">Транзакции</string>
+    <string name="nav_profile">Профиль</string>
 </resources>

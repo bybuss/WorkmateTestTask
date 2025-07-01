@@ -102,4 +102,8 @@
     <string name="currency_try">Turkish Lira</string>
     <string name="currency_usd">USA Dollar</string>
     <string name="currency_zar">South Africa Rand</string>
+
+    <string name="nav_currencies">Currencies</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_profile">Profile</string>
 </resources>

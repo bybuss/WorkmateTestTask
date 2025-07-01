@@ -12,8 +12,6 @@ retrofit = "2.11.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 xmlUtil = "0.91.0"
 room = "2.6.1"
-hilt-version = "2.49"
-ksp-version = "2.0.0-1.0.24"
 coilVersion = "1.4.0"
 recyclerviewVersion = "1.2.1"
 navigationUiKtx = "2.8.7"
@@ -24,6 +22,20 @@ activity = "1.10.1"
 constraintlayout = "2.2.1"
 testng = "6.9.6"
 junitJunit = "4.12"
+
+# Navigation
+navigationCompose = "2.9.0"
+# Kotlin serialization
+kotlinxSerializationJson = "1.8.0"
+
+# Hilt
+ksp = "2.1.0-1.0.29"
+hiltAndroid = "2.55"
+hiltAndroidCompiler = "2.55"
+hiltCompiler = "1.2.0"
+hiltNavigationCompose = "1.2.0"
+hilt = "2.50"
+hiltWork = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,8 +57,6 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 xmlutil-core = { group = "io.github.pdvrieze.xmlutil", name = "core", version.ref = "xmlUtil"  }
 xmlutil-serialization = { group = "io.github.pdvrieze.xmlutil", name = "serialization", version.ref = "xmlUtil"  }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coilVersion" }
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt-version" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt-version" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
@@ -62,11 +72,25 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
 
+# Navigation
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+# Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# Hilt
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-version" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationUiKtx" }
+
+# Hilt
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

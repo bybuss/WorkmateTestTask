@@ -74,8 +74,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // xml
-    implementation(libs.xmlutil.core)
-    implementation(libs.xmlutil.serialization)
+    //implementation(libs.xmlutil.core)
+    //implementation(libs.xmlutil.serialization)
 
     // retrofit
     implementation(libs.retrofit2)
@@ -92,11 +92,16 @@ dependencies {
 
     // hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
 
     // navigation
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    //implementation(libs.androidx.navigation.fragment.ktx)
+    //implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // coroutine
     implementation(libs.kotlinx.coroutines.core)
