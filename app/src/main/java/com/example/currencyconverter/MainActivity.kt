@@ -7,7 +7,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.currencyconverter.common.design_system.theme.CurrencyConverterTheme
 import com.example.currencyconverter.navigation.AppNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,5 +21,6 @@ class MainActivity : FragmentActivity() {
             }
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
+        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
     }
 }

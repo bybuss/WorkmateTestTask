@@ -1,4 +1,4 @@
-package com.example.currencyconverter.common.currency.domain.entity
+package com.example.currencyconverter.home.domain.models
 
 enum class Currency {
     USD,
