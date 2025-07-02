@@ -13,8 +13,6 @@ class AccountRepositoryImpl @Inject constructor(
     private val dao: AccountDao
 ) : AccountRepository {
 
-    override suspend fun getAll(): List<Account> = dao.getAll().map { it.toDomain() }
-
     override fun getAllFlow(): Flow<List<Account>> = dao.getAllAsFlow().map { list ->
         list.map { it.toDomain() }
     }

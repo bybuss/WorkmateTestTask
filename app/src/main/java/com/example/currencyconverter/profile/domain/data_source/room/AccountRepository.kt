@@ -4,7 +4,6 @@ import com.example.currencyconverter.profile.domain.models.Account
 import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
-    suspend fun getAll(): List<Account>
     fun getAllFlow(): Flow<List<Account>>
     suspend fun get(code: String): Account?
     suspend fun updateAmount(code: String, amount: Double)
