@@ -12,10 +12,11 @@ import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCas
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencySymbolUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
-import com.example.currencyconverter.profile.domain.use_cases.GetAccountsUseCase
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountsFlowUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class CurrencyListViewModel @Inject constructor(
     private val getCurrencyName: GetCurrencyNameUseCase,
     private val getFlagResId: GetFlagResIdUseCase,
     private val getCurrencySymbol: GetCurrencySymbolUseCase,
-    private val getAccounts: GetAccountsUseCase,
+    private val getAccounts: GetAccountsFlowUseCase,
 ) : ViewModel() {
 
     var state by mutableStateOf(CurrencyListState())
@@ -63,6 +64,7 @@ class CurrencyListViewModel @Inject constructor(
                 val amount = state.amountInput.toDoubleOrNull() ?: 1.0
 
                 val accountAmounts = getAccounts()
+                    .first()
                     .groupBy { it.code }
                     .mapValues { entry ->
                         entry.value.sumOf { it.amount }

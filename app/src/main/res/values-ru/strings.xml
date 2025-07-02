@@ -37,4 +37,6 @@
     <string name="nav_currencies">Валюты</string>
     <string name="nav_transactions">Транзакции</string>
     <string name="nav_profile">Профиль</string>
+
+    <string name="no_transactions">У вас пока нет транзакиций!</string>
 </resources>

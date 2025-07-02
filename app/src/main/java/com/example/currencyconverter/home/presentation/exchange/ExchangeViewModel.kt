@@ -5,13 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.currencyconverter.common.utils.format
+import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
+import com.example.currencyconverter.home.domain.use_cases.GetCurrencySymbolUseCase
+import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
+import com.example.currencyconverter.navigation.Screens
 import com.example.currencyconverter.profile.domain.models.Account
-import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
 import com.example.currencyconverter.profile.domain.use_cases.InsertAccountUseCase
 import com.example.currencyconverter.profile.domain.use_cases.UpdateAccountAmountUseCase
-import com.example.currencyconverter.transactions.data.data_source.room.dao.TransactionDao
-import com.example.currencyconverter.transactions.data.data_source.room.dbo.TransactionDbo
+import com.example.currencyconverter.transactions.domain.models.Transaction
+import com.example.currencyconverter.transactions.domain.use_cases.InsertTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -21,7 +26,10 @@ class ExchangeViewModel @Inject constructor(
     private val getAccount: GetAccountUseCase,
     private val insertAccount: InsertAccountUseCase,
     private val updateAccountAmount: UpdateAccountAmountUseCase,
-    private val transactionDao: TransactionDao,
+    private val insertTransaction: InsertTransactionUseCase,
+    private val getCurrencyName: GetCurrencyNameUseCase,
+    private val getCurrencySymbol: GetCurrencySymbolUseCase,
+    private val getFlagResId: GetFlagResIdUseCase,
 ) : ViewModel() {
 
     var state by mutableStateOf(ExchangeState())
@@ -29,26 +37,46 @@ class ExchangeViewModel @Inject constructor(
 
     fun onAction(action: ExchangeAction) {
         when (action) {
-            is ExchangeAction.Exchange -> exchange(
-                codeFrom = action.codeFrom,
-                codeTo = action.codeTo,
-                amountFrom = action.amountFrom,
-                amountTo = action.amountTo
-            )
-            is ExchangeAction.SetArgs -> state = state.copy(args = action.args, errorMessage = null)
+            is ExchangeAction.SetArgs -> setupArgs(action.args)
+            ExchangeAction.Confirm -> state.args?.let { args ->
+                exchange(args.codeFrom, args.codeTo, args.amountFrom, args.amountTo)
+            }
             else -> Unit
         }
+    }
+
+    private fun setupArgs(args: Screens.Exchange) {
+        val fromName = getCurrencyName(args.codeFrom)
+        val toName = getCurrencyName(args.codeTo)
+        val fromSymbol = getCurrencySymbol(args.codeFrom)
+        val toSymbol = getCurrencySymbol(args.codeTo)
+        state = state.copy(
+            args = args,
+            title = "$fromName to $toName",
+            rateText = "$toSymbol = $fromSymbol${(args.amountFrom / args.amountTo).format()}",
+            fromFlag = getFlagResId(args.codeFrom),
+            toFlag = getFlagResId(args.codeTo),
+            fromAmountText = "-$fromSymbol${args.amountFrom.format()}",
+            toAmountText = "+$toSymbol${args.amountTo.format()}",
+            buttonText = "Buy $toName for $fromName",
+            errorMessage = null
+        )
     }
 
     private fun exchange(codeFrom: String, codeTo: String, amountFrom: Double, amountTo: Double) {
         viewModelScope.launch {
             val fromAccount = getAccount(codeFrom)
-            if (fromAccount == null || fromAccount.amount < amountFrom) {
+            if (fromAccount == null) {
+                state = state.copy(errorMessage = "Account not found")
+                return@launch
+            }
+
+            if (fromAccount.amount < amountFrom) {
                 state = state.copy(errorMessage = "Not enough funds")
                 return@launch
-            } else {
-                updateAccountAmount(codeFrom, fromAccount.amount - amountFrom)
             }
+
+            updateAccountAmount(codeFrom, fromAccount.amount - amountFrom)
 
             val toAccount = getAccount(codeTo)
             if (toAccount == null) {
@@ -57,8 +85,8 @@ class ExchangeViewModel @Inject constructor(
                 updateAccountAmount(codeTo, toAccount.amount + amountTo)
             }
 
-            transactionDao.insertAll(
-                TransactionDbo(
+            insertTransaction(
+                Transaction(
                     id = 0,
                     from = codeFrom,
                     to = codeTo,

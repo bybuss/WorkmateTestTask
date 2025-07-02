@@ -8,6 +8,9 @@ import com.example.currencyconverter.home.domain.data_source.remote.CurrencyRepo
 import com.example.currencyconverter.profile.data.data_source.room.AccountRepositoryImpl
 import com.example.currencyconverter.profile.data.data_source.room.dao.AccountDao
 import com.example.currencyconverter.profile.domain.data_source.room.AccountRepository
+import com.example.currencyconverter.transactions.data.data_source.room.TransactionRepositoryImpl
+import com.example.currencyconverter.transactions.data.data_source.room.dao.TransactionDao
+import com.example.currencyconverter.transactions.domain.dataSource.room.TransactionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,4 +37,9 @@ object RepositoryModule {
     @Singleton
     fun provideAccountRepository(dao: AccountDao): AccountRepository =
         AccountRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun provideTransactionRepository(dao: TransactionDao): TransactionRepository =
+        TransactionRepositoryImpl(dao)
 }
