@@ -35,7 +35,7 @@ class ExchangeViewModel @Inject constructor(
                 amountFrom = action.amountFrom,
                 amountTo = action.amountTo
             )
-            is ExchangeAction.SetArgs -> state = state.copy(args = action.args)
+            is ExchangeAction.SetArgs -> state = state.copy(args = action.args, errorMessage = null)
             else -> Unit
         }
     }
@@ -43,7 +43,10 @@ class ExchangeViewModel @Inject constructor(
     private fun exchange(codeFrom: String, codeTo: String, amountFrom: Double, amountTo: Double) {
         viewModelScope.launch {
             val fromAccount = getAccount(codeFrom)
-            if (fromAccount != null) {
+            if (fromAccount == null || fromAccount.amount < amountFrom) {
+                state = state.copy(errorMessage = "Not enough funds")
+                return@launch
+            } else {
                 updateAccountAmount(codeFrom, fromAccount.amount - amountFrom)
             }
 
@@ -64,6 +67,7 @@ class ExchangeViewModel @Inject constructor(
                     dateTime = LocalDateTime.now()
                 )
             )
+            state = state.copy(errorMessage = null)
         }
     }
 }

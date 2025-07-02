@@ -36,7 +36,11 @@ fun AppNavHost() {
                 )
             }
             animatedTransition<Screens.Exchange> { backStackEntry ->
-                ExchangeScreenRoot(navController = navController, backStackEntry = backStackEntry)
+                ExchangeScreenRoot(
+                    navController = navController,
+                    backStackEntry = backStackEntry,
+                    snackBarHostState = snackbarHostState
+                )
             }
             animatedTransition<Screens.TransactionHistory> { }
             animatedTransition<Screens.Profile> { }

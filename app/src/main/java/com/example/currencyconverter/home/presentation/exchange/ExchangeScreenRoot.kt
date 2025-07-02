@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,12 +22,18 @@ import com.example.currencyconverter.navigation.Screens
 fun ExchangeScreenRoot(
     navController: NavHostController,
     backStackEntry: NavBackStackEntry,
+    snackBarHostState: SnackbarHostState,
     viewModel: ExchangeViewModel = hiltViewModel()
 ) {
     val args = backStackEntry.toRoute<Screens.Exchange>()
+    val state = viewModel.state
 
     LaunchedEffect(Unit) {
         viewModel.onAction(ExchangeAction.SetArgs(args))
+    }
+
+    LaunchedEffect(state.errorMessage) {
+        state.errorMessage?.let { snackBarHostState.showSnackbar(it) }
     }
 
     ExchangeScreen(
@@ -54,17 +61,18 @@ private fun ExchangeScreen(
     ) {
         val args = state.args
         args?.let {
-            Text(text = "${args.amountFrom} ${args.codeFrom} -> ${args.amountTo} ${args.codeTo}")
+            Text(text = "${args.codeFrom} -> ${args.codeTo}")
+            Text(text = "${args.amountFrom} ${args.codeFrom} = ${args.amountTo} ${args.codeTo}")
             Button(onClick = {
                 onAction(ExchangeAction.Exchange(
                     codeFrom = args.codeFrom,
                     codeTo = args.codeTo,
                     amountFrom = args.amountFrom,
-                    amountTo = args.amountTo,
+                    amountTo = args.amountTo
                 ))
                 onAction(ExchangeAction.Back)
             }) {
-                Text("Confirm")
+                Text("Buy ${args.codeTo} for ${args.codeFrom}")
             }
         } ?: run {
             LoadingIndicator()
