@@ -1,7 +1,7 @@
 package com.example.currencyconverter.transactions.presentation
 
-import com.example.currencyconverter.transactions.data.data_source.room.dbo.TransactionDbo
+import com.example.currencyconverter.transactions.domain.models.TransactionItem
 
 data class TransactionsState(
-    val transactions: List<TransactionDbo> = emptyList()
+    val transactions: List<TransactionItem> = emptyList()
 )
