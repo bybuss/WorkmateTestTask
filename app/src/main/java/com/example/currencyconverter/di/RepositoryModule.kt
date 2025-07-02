@@ -5,6 +5,9 @@ import com.example.currencyconverter.home.data.data_source.remote.CurrencyReposi
 import com.example.currencyconverter.home.data.data_source.remote.RatesService
 import com.example.currencyconverter.home.data.data_source.remote.RemoteRatesServiceImpl
 import com.example.currencyconverter.home.domain.data_source.remote.CurrencyRepository
+import com.example.currencyconverter.profile.data.data_source.room.AccountRepositoryImpl
+import com.example.currencyconverter.profile.data.data_source.room.dao.AccountDao
+import com.example.currencyconverter.profile.domain.data_source.room.AccountRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +29,9 @@ object RepositoryModule {
         service: RatesService,
         @ApplicationContext context: Context
     ): CurrencyRepository = CurrencyRepositoryImpl(service, context)
+
+    @Provides
+    @Singleton
+    fun provideAccountRepository(dao: AccountDao): AccountRepository =
+        AccountRepositoryImpl(dao)
 }

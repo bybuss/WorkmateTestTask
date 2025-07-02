@@ -4,6 +4,11 @@ import com.example.currencyconverter.home.domain.data_source.remote.CurrencyRepo
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
+import com.example.currencyconverter.profile.domain.data_source.room.AccountRepository
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountsUseCase
+import com.example.currencyconverter.profile.domain.use_cases.InsertAccountUseCase
+import com.example.currencyconverter.profile.domain.use_cases.UpdateAccountAmountUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,4 +33,24 @@ object UseCaseModule {
     @Singleton
     fun provideGetFlagResIdUseCase(repository: CurrencyRepository): GetFlagResIdUseCase =
         GetFlagResIdUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideGetAccountsUseCase(repository: AccountRepository): GetAccountsUseCase =
+        GetAccountsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideGetAccountUseCase(repository: AccountRepository): GetAccountUseCase =
+        GetAccountUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideUpdateAccountAmountUseCase(repository: AccountRepository): UpdateAccountAmountUseCase =
+        UpdateAccountAmountUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideInsertAccountUseCase(repository: AccountRepository): InsertAccountUseCase =
+        InsertAccountUseCase(repository)
 }
