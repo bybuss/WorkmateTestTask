@@ -49,4 +49,13 @@ class CurrencyRepositoryImpl @Inject constructor(
         )
         return if (id != 0) id else R.drawable.flag_unknown
     }
+
+    override fun getCurrencySymbol(code: String): String {
+        val id = resources.getIdentifier(
+            "symbol_${code.lowercase()}",
+            "string",
+            packageName
+        )
+        return if (id != 0) resources.getString(id) else code
+    }
 }

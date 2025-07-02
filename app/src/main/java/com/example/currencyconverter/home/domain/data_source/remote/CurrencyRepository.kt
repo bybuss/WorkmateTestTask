@@ -7,4 +7,5 @@ interface CurrencyRepository {
     suspend fun loadRates(base: String, amount: Double): Result<List<Rate>>
     fun getCurrencyName(code: String): String
     fun getFlagResId(code: String): Int
+    fun getCurrencySymbol(code: String): String
 }

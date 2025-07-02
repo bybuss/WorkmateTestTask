@@ -19,6 +19,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +33,7 @@ import com.example.currencyconverter.common.design_system.LoadingIndicator
 import com.example.currencyconverter.common.design_system.theme.CustomTheme
 import com.example.currencyconverter.common.utils.UiState
 import com.example.currencyconverter.navigation.Screens
+import kotlinx.coroutines.launch
 
 @Composable
 fun CurrencyListScreenRoot(
@@ -41,6 +43,7 @@ fun CurrencyListScreenRoot(
 ) {
     val state = viewModel.state
     val itemsState = state.items
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(state) {
         if (itemsState is UiState.Error) {
@@ -60,13 +63,22 @@ fun CurrencyListScreenRoot(
             state = viewModel.state,
             onAction = { action ->
                 when (action) {
-                    is CurrencyListAction.NavigateToExchange
-                        -> navController.navigate(Screens.Exchange(
-                        codeFrom = action.codeFrom,
-                        codeTo = action.codeTo,
-                        amountFrom = action.amountFrom,
-                        amountTo = action.amountTo
-                    ))
+                    is CurrencyListAction.NavigateToExchange -> {
+                        if (action.codeFrom == action.codeTo) {
+                            scope.launch {
+                                snackBarHostState.showSnackbar("Cannot convert same currency")
+                            }
+                        } else {
+                            navController.navigate(
+                                Screens.Exchange(
+                                    codeFrom = action.codeFrom,
+                                    codeTo = action.codeTo,
+                                    amountFrom = action.amountFrom,
+                                    amountTo = action.amountTo
+                                )
+                            )
+                        }
+                    }
                     else -> Unit
                 }
                 viewModel.onAction(action)
@@ -92,7 +104,7 @@ fun CurrencyList(
                         if (isBase) CustomTheme.colors.selectedCard
                         else CustomTheme.colors.cardBackground
                     )
-                    .clickable(enabled = !state.isEditing) {
+                    .clickable(enabled = !state.isEditing && item.code != state.baseCurrency) {
                         onAction(
                             CurrencyListAction.NavigateToExchange(
                                 codeFrom = item.code,
@@ -130,6 +142,7 @@ fun CurrencyList(
                         onValueChange = { onAction(CurrencyListAction.ChangeAmount(it)) },
                         modifier = Modifier.width(100.dp),
                         singleLine = true,
+                        leadingIcon = { Text(text = item.symbol) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
                             imeAction = ImeAction.Next
@@ -175,7 +188,7 @@ fun CurrencyList(
                     }
                 } else {
                     Text(
-                        text = String.format("%.2f", item.rate),
+                        text = item.symbol + String.format("%.2f", item.rate),
                         style = CustomTheme.typography.h3,
                         color = CustomTheme.colors.primaryText,
                         modifier = Modifier

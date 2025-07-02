@@ -9,6 +9,7 @@ import com.example.currencyconverter.common.utils.UiState
 import com.example.currencyconverter.common.utils.toUiState
 import com.example.currencyconverter.home.domain.models.CurrencyItem
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
+import com.example.currencyconverter.home.domain.use_cases.GetCurrencySymbolUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
 import com.example.currencyconverter.profile.domain.use_cases.GetAccountsUseCase
@@ -24,6 +25,7 @@ class CurrencyListViewModel @Inject constructor(
     private val loadRates: LoadRatesUseCase,
     private val getCurrencyName: GetCurrencyNameUseCase,
     private val getFlagResId: GetFlagResIdUseCase,
+    private val getCurrencySymbol: GetCurrencySymbolUseCase,
     private val getAccounts: GetAccountsUseCase,
 ) : ViewModel() {
 
@@ -69,18 +71,27 @@ class CurrencyListViewModel @Inject constructor(
 
                 when (response) {
                     is UiState.Success -> {
-                        val items = response.data.mapNotNull { rate ->
+                        val items = response.data.map { rate ->
                             val name = getCurrencyName(rate.currency)
                             val flag = getFlagResId(rate.currency)
-                            val item = CurrencyItem(
+                            val symbol = getCurrencySymbol(rate.currency)
+                            CurrencyItem(
                                 code = rate.currency,
                                 name = name,
                                 flagRes = flag,
                                 rate = rate.value,
+                                symbol = symbol
                             )
-                            if ((accountAmounts[rate.currency] ?: 0.0) >= rate.value) item else null
                         }
-                        state = state.copy(items = UiState.Success(items))
+
+                        val filtered = if (state.isEditing) {
+                            items.filter { item ->
+                                item.code == state.baseCurrency ||
+                                        (accountAmounts[item.code] ?: 0.0) >= item.rate
+                            }
+                        } else items
+
+                        state = state.copy(items = UiState.Success(filtered))
                     }
                     is UiState.Error -> state = state.copy(items = response)
                     else -> {}
