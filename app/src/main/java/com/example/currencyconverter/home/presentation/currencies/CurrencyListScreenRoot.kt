@@ -146,7 +146,7 @@ fun CurrencyList(
                     TextField(
                         value = state.amountInput,
                         onValueChange = { onAction(CurrencyListAction.ChangeAmount(it)) },
-                        modifier = Modifier.width(100.dp),
+                        modifier = Modifier.widthIn(min = 100.dp, max = 150.dp),
                         singleLine = true,
                         leadingIcon = { Text(text = item.symbol) },
                         keyboardOptions = KeyboardOptions(
@@ -165,7 +165,12 @@ fun CurrencyList(
                             focusedContainerColor = CustomTheme.colors.cardBackground,
                             unfocusedContainerColor = CustomTheme.colors.cardBackground,
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
+                            unfocusedIndicatorColor = Color.Transparent,
+                            focusedTextColor = CustomTheme.colors.primaryText,
+                            unfocusedTextColor = CustomTheme.colors.primaryText,
+                            focusedTrailingIconColor = CustomTheme.colors.primaryText,
+                            unfocusedTrailingIconColor = CustomTheme.colors.primaryText,
+
                         ),
                         textStyle = CustomTheme.typography.h3.copy(color = CustomTheme.colors.primaryText),
                         trailingIcon = {
@@ -199,8 +204,9 @@ fun CurrencyList(
                         color = CustomTheme.colors.primaryText,
                         modifier = Modifier
                             .padding(end = 8.dp)
-                            .clickable(enabled = isBase) {
-                                if (isBase) onAction(CurrencyListAction.StartEdit)
+                            .clickable {
+                                if (!isBase) onAction(CurrencyListAction.SelectCurrency(item.code))
+                                onAction(CurrencyListAction.StartEdit)
                             }
                     )
                     if (state.isEditing && item.code != state.baseCurrency) {
