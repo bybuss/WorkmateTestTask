@@ -12,6 +12,7 @@ import com.example.currencyconverter.common.design_system.CustomSnackbarHost
 import com.example.currencyconverter.common.design_system.theme.CustomTheme
 import com.example.currencyconverter.home.presentation.currencies.CurrencyListScreenRoot
 import com.example.currencyconverter.home.presentation.exchange.ExchangeScreenRoot
+import com.example.currencyconverter.transactions.presentation.TransactionsScreenRoot
 
 @Composable
 fun AppNavHost() {
@@ -42,7 +43,7 @@ fun AppNavHost() {
                     snackBarHostState = snackbarHostState
                 )
             }
-            animatedTransition<Screens.TransactionHistory> { }
+            animatedTransition<Screens.TransactionHistory> { TransactionsScreenRoot() }
             animatedTransition<Screens.Profile> { }
         }
     }
