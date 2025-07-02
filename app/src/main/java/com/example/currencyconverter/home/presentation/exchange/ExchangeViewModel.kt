@@ -9,7 +9,6 @@ import com.example.currencyconverter.common.utils.format
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencySymbolUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
-import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
 import com.example.currencyconverter.navigation.Screens
 import com.example.currencyconverter.profile.domain.models.Account
 import com.example.currencyconverter.profile.domain.use_cases.InsertAccountUseCase
@@ -17,7 +16,6 @@ import com.example.currencyconverter.profile.domain.use_cases.UpdateAccountAmoun
 import com.example.currencyconverter.transactions.domain.models.Transaction
 import com.example.currencyconverter.transactions.domain.use_cases.InsertTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.example.currencyconverter.common.utils.Result
 import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -28,7 +26,6 @@ class ExchangeViewModel @Inject constructor(
     private val getAccount: GetAccountUseCase,
     private val insertAccount: InsertAccountUseCase,
     private val updateAccountAmount: UpdateAccountAmountUseCase,
-    private val loadRates: LoadRatesUseCase,
     private val insertTransaction: InsertTransactionUseCase,
     private val getCurrencyName: GetCurrencyNameUseCase,
     private val getCurrencySymbol: GetCurrencySymbolUseCase,
@@ -68,35 +65,18 @@ class ExchangeViewModel @Inject constructor(
 
     private fun exchange(codeFrom: String, codeTo: String, amountFrom: Double, amountTo: Double) {
         viewModelScope.launch {
-            val rubAccount = getAccount("RUB")
-            if (rubAccount == null) {
+            val fromAccount = getAccount(codeFrom)
+            if (fromAccount == null) {
                 state = state.copy(errorMessage = "Account not found")
                 return@launch
             }
 
-            val rubCost = if (codeFrom == "RUB") {
-                amountFrom
-            } else {
-                when (val result = loadRates(codeFrom, amountFrom)) {
-                    is Result.Success -> {
-                        result.data.firstOrNull { it.currency == "RUB" }?.value
-                            ?: amountFrom
-                    }
-                    is Result.Error -> amountFrom
-                }
-            }
-
-            if (rubAccount.amount < rubCost) {
+            if (fromAccount.amount < amountFrom) {
                 state = state.copy(errorMessage = "Not enough funds")
                 return@launch
             }
 
-            updateAccountAmount("RUB", rubAccount.amount - rubCost)
-
-            val fromAccount = getAccount(codeFrom)
-            if (fromAccount != null && codeFrom != "RUB") {
-                updateAccountAmount(codeFrom, fromAccount.amount - amountFrom)
-            }
+            updateAccountAmount(codeFrom, fromAccount.amount - amountFrom)
 
             val toAccount = getAccount(codeTo)
             if (toAccount == null) {
