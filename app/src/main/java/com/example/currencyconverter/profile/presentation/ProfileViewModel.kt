@@ -24,13 +24,29 @@ class ProfileViewModel @Inject constructor(
         load()
     }
 
+    fun onAction(action: ProfileAction) {
+        when (action) {
+            ProfileAction.Next -> move(1)
+            ProfileAction.Prev -> move(-1)
+        }
+    }
+
     private fun load() {
         viewModelScope.launch {
             getAccountsFlow().collect { accounts ->
-                val account = accounts.firstOrNull()
-                val flag = account?.let { getFlagResId(it.code) }
-                state = state.copy(account = account, flagRes = flag)
+                val index = state.selectedIndex.coerceIn(0, accounts.size - 1)
+                val flag = accounts.getOrNull(index)?.let { getFlagResId(it.code) }
+                state = state.copy(accounts = accounts, selectedIndex = index, flagRes = flag)
             }
+        }
+    }
+
+    private fun move(delta: Int) {
+        val newIndex = (state.selectedIndex + delta).coerceIn(0, state.accounts.size - 1)
+        if (newIndex != state.selectedIndex) {
+            val account = state.accounts.getOrNull(newIndex)
+            val flag = account?.let { getFlagResId(it.code) }
+            state = state.copy(selectedIndex = newIndex, flagRes = flag)
         }
     }
 }
