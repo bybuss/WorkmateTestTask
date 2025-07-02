@@ -19,6 +19,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,9 +30,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.currencyconverter.common.design_system.LoadingIndicator
 import com.example.currencyconverter.common.design_system.theme.CustomTheme
 import com.example.currencyconverter.common.utils.UiState
+import com.example.currencyconverter.common.utils.format
 import com.example.currencyconverter.navigation.Screens
 import kotlinx.coroutines.launch
 
@@ -44,6 +47,17 @@ fun CurrencyListScreenRoot(
     val state = viewModel.state
     val itemsState = state.items
     val scope = rememberCoroutineScope()
+    val backEntry = navController.currentBackStackEntryAsState().value
+    val clearEdit = backEntry?.savedStateHandle
+        ?.getStateFlow("clear_edit", false)
+        ?.collectAsState()
+
+    LaunchedEffect(clearEdit?.value) {
+        if (clearEdit?.value == true) {
+            viewModel.onAction(CurrencyListAction.ClearAmount)
+            backEntry.savedStateHandle["clear_edit"] = false
+        }
+    }
 
     LaunchedEffect(state) {
         if (itemsState is UiState.Error) {
@@ -104,16 +118,8 @@ fun CurrencyList(
                         if (isBase) CustomTheme.colors.selectedCard
                         else CustomTheme.colors.cardBackground
                     )
-                    .clickable(enabled = !state.isEditing && item.code != state.baseCurrency) {
-                        onAction(
-                            CurrencyListAction.NavigateToExchange(
-                                codeFrom = item.code,
-                                codeTo = state.baseCurrency,
-                                amountFrom = item.rate,
-                                amountTo = state.amountInput.toDoubleOrNull() ?: 0.0
-                            )
-                        )
-                        onAction(CurrencyListAction.StartEdit)
+                    .clickable(enabled = !state.isEditing) {
+                        onAction(CurrencyListAction.SelectCurrency(item.code))
                     }
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -188,7 +194,7 @@ fun CurrencyList(
                     }
                 } else {
                     Text(
-                        text = item.symbol + String.format("%.2f", item.rate),
+                        text = item.symbol + item.rate.format(),
                         style = CustomTheme.typography.h3,
                         color = CustomTheme.colors.primaryText,
                         modifier = Modifier
