@@ -7,7 +7,6 @@ plugins {
     id("androidx.room")
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -17,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.example.currencyconverter"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -73,10 +72,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // xml
-    implementation(libs.xmlutil.core)
-    implementation(libs.xmlutil.serialization)
-
     // retrofit
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
@@ -92,26 +87,28 @@ dependencies {
 
     // hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
+
+    implementation(libs.androidx.work.runtime)
 
     // navigation
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     // coroutine
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // recycler
-    implementation(libs.androidx.recyclerview)
-
     // kaspresso
-    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.1")
-    androidTestUtil("androidx.test:orchestrator:1.4.2")
+    androidTestImplementation(libs.kaspresso)
+    androidTestUtil(libs.androidx.orchestrator)
 
     // test
-    testImplementation("org.mockito:mockito-core:5.18.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.junit.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

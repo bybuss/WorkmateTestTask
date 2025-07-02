@@ -102,4 +102,35 @@
     <string name="currency_try">Turkish Lira</string>
     <string name="currency_usd">USA Dollar</string>
     <string name="currency_zar">South Africa Rand</string>
+
+    <string name="nav_currencies">Currencies</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="loading" translatable="false">Loading…</string>
+    <string name="error_title" translatable="false">Sorry!</string>
+    <string name="error_text" translatable="false">There is no pictures.\nPleace come back later.</string>
+    <string name="network_error_title" translatable="false">Connection Problem!</string>
+    <string name="network_error_text" translatable="false">Unable to connect to the server. \nPlease check your internet connection.</string>
+    <string name="timeout_error_title" translatable="false">Request Timeout!</string>
+    <string name="timeout_error_text" translatable="false">The request took too long. \nPlease try again in a better network environment.</string>
+    <string name="authorization_error_title" translatable="false">Session Expired!</string>
+    <string name="authorization_error_text" translatable="false">Your login session has expired. \nPlease sign in again.</string>
+    <string name="generic_error_title" translatable="false">Something Went Wrong!</string>
+    <string name="generic_error_text" translatable="false">An unexpected error occurred. \nOur team has been notified.</string>
+    <string name="server_error_title" translatable="false">System Error!</string>
+    <string name="server_error_text" translatable="false">Server is temporarily unavailable. \nPlease try again later.</string>
+    <string name="fields_error_title" translatable="false">Неправильно заполнены поля!</string>
+    <string name="fields_error_text" translatable="false">Пожалуйста, введите данные корректно.</string>
+    <string name="user_credentials_error_title" translatable="false">Такого пользователя несуществует!</string>
+    <string name="user_credentials_error_text" translatable="false">Пожалуйста, проверьте ваши данные.</string>
+    <string name="null_error_title" translatable="false">Неудалось получить данные!</string>
+    <string name="no_results_found_error" translatable="false">No results found</string>
+    <string name="forbidden_error_title" translatable="false">Доступ запрещен!</string>
+    <string name="forbidden_error_text" translatable="false">У вас недостаточно прав для совершения данного дествия.</string>
+    <string name="file_upload_error_title" translatable="false">Не удалось загрузить файл!</string>
+    <string name="empty_file_upload_error_title" translatable="false">Вы не можете загрузить фотографию, не выбрав ее!</string>
+    <string name="error_get_user_title" translatable="false">Не удалось получить пользователя!</string>
+    <string name="error_get_user_text" translatable="false">Попробуйте выйте в настройках аккаунта и зайти заново.\nИли попробуйте позже</string>
+
 </resources>
