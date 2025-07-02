@@ -11,6 +11,7 @@ import com.example.currencyconverter.home.domain.models.CurrencyItem
 import com.example.currencyconverter.home.domain.use_cases.GetCurrencyNameUseCase
 import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class CurrencyListViewModel @Inject constructor(
     private val loadRates: LoadRatesUseCase,
     private val getCurrencyName: GetCurrencyNameUseCase,
-    private val getFlagResId: GetFlagResIdUseCase
+    private val getFlagResId: GetFlagResIdUseCase,
+    private val getAccounts: GetAccountsUseCase,
 ) : ViewModel() {
 
     var state by mutableStateOf(CurrencyListState())
@@ -39,10 +41,7 @@ class CurrencyListViewModel @Inject constructor(
                 state = state.copy(baseCurrency = action.code)
                 startUpdates()
             }
-            is CurrencyListAction.ChangeAmount -> {
-                state = state.copy(amountInput = action.value)
-                startUpdates()
-            }
+            is CurrencyListAction.ChangeAmount -> state = state.copy(amountInput = action.value)
             CurrencyListAction.StartEdit -> state = state.copy(isEditing = true)
             CurrencyListAction.ClearAmount -> {
                 state = state.copy(amountInput = "1", isEditing = false)
@@ -61,19 +60,25 @@ class CurrencyListViewModel @Inject constructor(
                 val base = state.baseCurrency
                 val amount = state.amountInput.toDoubleOrNull() ?: 1.0
 
+                val accountAmounts = getAccounts()
+                    .groupBy { it.code }
+                    .mapValues { entry ->
+                        entry.value.sumOf { it.amount }
+                    }
                 val response = loadRates(base, amount).toUiState()
 
                 when (response) {
                     is UiState.Success -> {
-                        val items = response.data.map { rate ->
+                        val items = response.data.mapNotNull { rate ->
                             val name = getCurrencyName(rate.currency)
                             val flag = getFlagResId(rate.currency)
-                            CurrencyItem(
+                            val item = CurrencyItem(
                                 code = rate.currency,
                                 name = name,
                                 flagRes = flag,
                                 rate = rate.value,
                             )
+                            if ((accountAmounts[rate.currency] ?: 0.0) >= rate.value) item else null
                         }
                         state = state.copy(items = UiState.Success(items))
                     }
