@@ -8,7 +8,12 @@ sealed interface Screens {
     data object Currencies: Screens
 
     @Serializable
-    data class Exchange(val codeFrom: String): Screens
+    data class Exchange(
+        val codeFrom: String,
+        val codeTo: String,
+        val amountFrom: Double,
+        val amountTo: Double
+    ): Screens
 
     @Serializable
     data object TransactionHistory: Screens

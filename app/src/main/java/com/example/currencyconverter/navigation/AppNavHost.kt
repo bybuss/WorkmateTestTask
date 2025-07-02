@@ -21,8 +21,8 @@ fun AppNavHost() {
     Scaffold(
         snackbarHost = { CustomSnackbarHost(hostState = snackbarHostState) },
         bottomBar = { BottomBar(navController = navController) },
-        contentColor = CustomTheme.colors.background,
-        containerColor = CustomTheme.colors.primaryText
+        contentColor = CustomTheme.colors.primaryText ,
+        containerColor = CustomTheme.colors.background
     ) { innerPadding ->
         NavHost(
             startDestination = Screens.Currencies,
@@ -35,8 +35,8 @@ fun AppNavHost() {
                     snackBarHostState = snackbarHostState,
                 )
             }
-            animatedTransition<Screens.Exchange> {
-                ExchangeScreenRoot()
+            animatedTransition<Screens.Exchange> { backStackEntry ->
+                ExchangeScreenRoot(navController = navController, backStackEntry = backStackEntry)
             }
             animatedTransition<Screens.TransactionHistory> { }
             animatedTransition<Screens.Profile> { }
