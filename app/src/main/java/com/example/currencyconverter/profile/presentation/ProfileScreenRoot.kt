@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.currencyconverter.common.design_system.theme.CustomTheme
+import com.example.currencyconverter.common.utils.format
 
 @Composable
 fun ProfileScreenRoot(viewModel: ProfileViewModel = hiltViewModel()) {
@@ -33,7 +35,11 @@ fun ProfileScreenRoot(viewModel: ProfileViewModel = hiltViewModel()) {
                     modifier = Modifier.size(80.dp)
                 )
             }
-            Text(text = "${account.code}: ${account.amount}")
+            Text(
+                text = "Balance: ${account.code} ${account.amount.format()}",
+                style = CustomTheme.typography.h3,
+                color = CustomTheme.colors.primaryText
+            )
         }
     }
 }
