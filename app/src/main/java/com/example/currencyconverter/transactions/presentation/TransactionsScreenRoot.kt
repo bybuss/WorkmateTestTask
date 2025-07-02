@@ -12,12 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.currencyconverter.R
@@ -28,10 +34,25 @@ import com.example.currencyconverter.transactions.domain.models.TransactionItem
 fun TransactionsScreenRoot(viewModel: TransactionsViewModel = hiltViewModel()) {
     val state = viewModel.state
 
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(state.transactions) { transaction ->
-            TransactionItemView(transaction)
-            Spacer(modifier = Modifier.height(4.dp))
+    if (state.transactions.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = stringResource(id = R.string.no_transactions),
+                style = CustomTheme.typography.h4,
+                color = CustomTheme.colors.primaryText
+            )
+        }
+    } else {
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(state.transactions) { transaction ->
+                TransactionItemView(transaction)
+                Spacer(modifier = Modifier.height(4.dp))
+            }
         }
     }
 }
@@ -63,23 +84,50 @@ private fun TransactionItemView(transaction: TransactionItem) {
 
 @Composable
 private fun DoubleFlagAvatar(flagFrom: Int?, flagTo: Int?, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.size(40.dp)) {
-        if (flagFrom != 0) {
-            Image(
-                painter = painterResource(flagFrom ?: R.drawable.flag_unknown),
-                contentDescription = null,
-                modifier = Modifier
-                    .matchParentSize()
-                    .clip(androidx.compose.foundation.shape.CircleShape))
-        }
-        if (flagTo != 0) {
-            Image(
-                painter = painterResource(flagTo ?: R.drawable.flag_unknown),
-                contentDescription = null,
-                modifier = Modifier
-                    .matchParentSize()
-                    .clip(androidx.compose.foundation.shape.CircleShape)
-                    .padding(start = 20.dp))
-        }
+    val leftShape = GenericShape { size, _ ->
+        moveTo(0f, 0f)
+        lineTo(size.width / 2f, 0f)
+        lineTo(size.width / 2f, size.height)
+        lineTo(0f, size.height)
+        close()
+    }
+    val rightShape = GenericShape { size, _ ->
+        moveTo(size.width / 2f, 0f)
+        lineTo(size.width, 0f)
+        lineTo(size.width, size.height)
+        lineTo(size.width / 2f, size.height)
+        close()
+    }
+    Box(
+        modifier = modifier
+            .size(40.dp)
+            .clip(CircleShape)
+    ) {
+        Image(
+            painter = painterResource(flagFrom ?: R.drawable.flag_unknown),
+            contentDescription = null,
+            modifier = Modifier
+                .matchParentSize()
+                .graphicsLayer {
+                    rotationZ = 45f
+                    clip = true
+                    shape = leftShape
+                }
+                .rotate(-45f),
+            contentScale = ContentScale.Crop
+        )
+        Image(
+            painter = painterResource(flagTo ?: R.drawable.flag_unknown),
+            contentDescription = null,
+            modifier = Modifier
+                .matchParentSize()
+                .graphicsLayer {
+                    rotationZ = 45f
+                    clip = true
+                    shape = rightShape
+                }
+                .rotate(-45f),
+            contentScale = ContentScale.Crop
+        )
     }
 }

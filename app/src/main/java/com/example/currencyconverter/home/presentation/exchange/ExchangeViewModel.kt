@@ -12,13 +12,13 @@ import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
 import com.example.currencyconverter.navigation.Screens
 import com.example.currencyconverter.profile.domain.models.Account
-import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
 import com.example.currencyconverter.profile.domain.use_cases.InsertAccountUseCase
 import com.example.currencyconverter.profile.domain.use_cases.UpdateAccountAmountUseCase
 import com.example.currencyconverter.transactions.domain.models.Transaction
 import com.example.currencyconverter.transactions.domain.use_cases.InsertTransactionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.currencyconverter.common.utils.Result
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject

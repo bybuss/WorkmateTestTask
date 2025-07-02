@@ -28,16 +28,18 @@ class TransactionsViewModel @Inject constructor(
 
     private fun loadTransactions() {
         viewModelScope.launch {
-            val items = getTransactions().map { tr ->
-                TransactionItem(
-                    id = tr.id,
-                    flagFrom = getFlagResId(tr.from),
-                    flagTo = getFlagResId(tr.to),
-                    pairText = "${tr.from} -> ${tr.to}",
-                    amountText = "${tr.fromAmount.format()} -> ${tr.toAmount.format()}"
-                )
+            getTransactions().collect { list ->
+                val items = list.map { transaction ->
+                    TransactionItem(
+                        id = transaction.id,
+                        flagFrom = getFlagResId(transaction.from),
+                        flagTo = getFlagResId(transaction.to),
+                        pairText = "${transaction.from} -> ${transaction.to}",
+                        amountText = "${transaction.fromAmount.format()} -> ${transaction.toAmount.format()}"
+                    )
+                }
+                state = state.copy(transactions = items)
             }
-            state = state.copy(transactions = items)
         }
     }
 }

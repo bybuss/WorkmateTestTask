@@ -6,7 +6,7 @@ import com.example.currencyconverter.home.domain.use_cases.GetFlagResIdUseCase
 import com.example.currencyconverter.home.domain.use_cases.LoadRatesUseCase
 import com.example.currencyconverter.profile.domain.data_source.room.AccountRepository
 import com.example.currencyconverter.profile.domain.use_cases.GetAccountUseCase
-import com.example.currencyconverter.profile.domain.use_cases.GetAccountsUseCase
+import com.example.currencyconverter.profile.domain.use_cases.GetAccountsFlowUseCase
 import com.example.currencyconverter.profile.domain.use_cases.InsertAccountUseCase
 import com.example.currencyconverter.profile.domain.use_cases.UpdateAccountAmountUseCase
 import com.example.currencyconverter.transactions.domain.dataSource.room.TransactionRepository
@@ -39,8 +39,8 @@ object UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideGetAccountsUseCase(repository: AccountRepository): GetAccountsUseCase =
-        GetAccountsUseCase(repository)
+    fun provideGetAccountsFlowUseCase(repository: AccountRepository): GetAccountsFlowUseCase =
+        GetAccountsFlowUseCase(repository)
 
     @Provides
     @Singleton
