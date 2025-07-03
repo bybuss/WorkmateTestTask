@@ -41,6 +41,9 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+    buildFeatures {
+        compose = true
         viewBinding = true
     }
     room {
@@ -62,9 +65,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-//    testImplementation(libs.junit)
-//    testImplementation(libs.testng)
-//    testImplementation(libs.junit.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -111,4 +111,6 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.junit.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.core)
 }
