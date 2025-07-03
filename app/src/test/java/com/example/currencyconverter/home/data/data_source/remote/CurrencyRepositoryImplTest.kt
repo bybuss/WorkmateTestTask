@@ -1,7 +1,6 @@
 package com.example.currencyconverter.home.data.data_source.remote
 
 import android.content.Context
-import android.content.res.Resources
 import com.example.currencyconverter.home.data.data_source.remote.dto.RateDto
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
