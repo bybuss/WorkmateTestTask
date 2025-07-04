@@ -21,6 +21,5 @@ class MainActivity : FragmentActivity() {
             }
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
-        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightNavigationBars = true
     }
 }
