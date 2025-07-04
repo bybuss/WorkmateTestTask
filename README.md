@@ -9,7 +9,7 @@
 - [Портфолио](#портфолио)
 
 ## Описание
-**Currency Converter — приложение для конвертации валют, выполненное как тестовое задание для компании [Workmate](https://work-mate.ru/). Оно состоит из трех экранов: "Валюты", "Обмен" и "Транзакции". Приложение позволяет просматривать курсы валют, обменивать валюту с учетом доступных средств на счетах и просматривать историю транзакций.
+**Currency Converter** — приложение для конвертации валют, выполненное как тестовое задание для компании [Workmate](https://work-mate.ru/). Оно состоит из трех экранов: "Валюты", "Обмен" и "Транзакции". Приложение позволяет просматривать курсы валют, обменивать валюту с учетом доступных средств на счетах и просматривать историю транзакций.
 
 ### Основные функции
 1. Анимированный Splash Screen с логотипом Workmate.
@@ -42,11 +42,11 @@
 
 ### Темная тема
 <p align="center">
-  <img src="screenshots/6_dark.jpg" width="125" />
-  <img src="screenshots/6_dark.jpg" width="125" />
-  <img src="screenshots/6_dark.jpg" width="125" />
-  <img src="screenshots/6_dark.jpg" width="125" />
-  <img src="screenshots/6_dark.jpg" width="125" />
+  <img src="screenshots/1_dark.jpg" width="125" />
+  <img src="screenshots/2_dark.jpg" width="125" />
+  <img src="screenshots/3_dark.jpg" width="125" />
+  <img src="screenshots/4_dark.jpg" width="125" />
+  <img src="screenshots/5_dark.jpg" width="125" />
   <img src="screenshots/6_dark.jpg" width="125" />
 </p>
 
@@ -60,9 +60,9 @@
 
 ## Установка
 
-<p align="center">Ссылка на текущую версию <a href="">Releases</a></p>
-<p align="center"><a href="">Прямая ссылка на установку .zip</a></p>
-<p align="center"><a href="">Прямая ссылка на установку .apk</a></p>
+<p align="center">Ссылка на текущую версию <a href="https://github.com/bybuss/WorkmateTestTask/releases/tag/v1.0.0">Releases</a></p>
+<p align="center"><a href="https://github.com/user-attachments/files/21058578/release-apk.zip">Прямая ссылка на установку .zip</a></p>
+<p align="center"><a href="https://github.com/bybuss/WorkmateTestTask/blob/main/app/release/app-release.apk">Прямая ссылка на установку .apk</a></p>
 
 
 ## Портфолио
